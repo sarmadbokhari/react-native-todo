@@ -22,21 +22,11 @@ export default class App extends Component {
       dataSource: ds.cloneWithRows([])
     }
 
-    this.handleToggleComplete = this.handleToggleComplete.bind(this);
     this.setSource = this.setSource.bind(this);
     this.handleAddItem = this.handleAddItem.bind(this);
     this.handleToggleAllComplete = this.handleToggleAllComplete.bind(this);
-  }
-
-  handleToggleComplete(key, complete) {
-    const newItems = this.state.items.map((item) => {
-      if (item.key !== key) return item;
-      return {
-        ...item,
-        complete
-      }
-      this.setSource(newItems, newItems);
-    })
+    this.handleToggleComplete = this.handleToggleComplete.bind(this);
+    this.handleRemoveItem = this.handleRemoveItem.bind(this);
   }
 
   setSource(items, itemsDatesource, otherState = {}) {
@@ -45,18 +35,6 @@ export default class App extends Component {
       dataSource: this.state.dataSource.cloneWithRows(itemsDatesource),
       ...otherState
     })
-  }
-
-  handleToggleAllComplete() {
-    const complete = !this.state.allComplete;
-    const newItems = this.state.items.map((item) => ({
-      ...item,
-      complete
-    }))
-
-    console.table(newItems);
-
-    this.setSource(newItems, newItems, { allComplete: complete });
   }
 
   handleAddItem() {
@@ -72,6 +50,38 @@ export default class App extends Component {
     ]
 
     this.setSource(newItems, newItems, { value: '' });
+  }
+
+  handleToggleAllComplete() {
+    const complete = !this.state.allComplete;
+    const newItems = this.state.items.map((item) => ({
+      ...item,
+      complete
+    }))
+
+    console.table(newItems);
+
+    this.setSource(newItems, newItems, { allComplete: complete });
+  }
+
+  handleToggleComplete(key, complete) {
+    const newItems = this.state.items.map((item) => {
+      if (item.key !== key) return item;
+      return {
+        ...item,
+        complete
+      }
+      this.setSource(newItems, newItems);
+    })
+  }
+
+
+  handleRemoveItem(key) {
+    const newItems = this.state.items.filter((item) => {
+      return item.key !== key;
+    })
+
+    this.setSource(newItems, newItems);
   }
 
   render() {
@@ -92,6 +102,7 @@ export default class App extends Component {
               return (
                 <Row
                   key={key}
+                  onRemove={() => this.handleRemoveItem(key)}
                   onComplete={(complete) => this.handleToggleComplete(key, complete)}
                   {...value}
                 />
