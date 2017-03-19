@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import {
-  View, Text, StyleSheet, Platform, ListView, Keyboard
+  View, Text, StyleSheet, Platform, ListView, Keyboard, AsyncStorage
 } from 'react-native';
 import Header from './header';
 import Footer from './footer';
@@ -40,12 +40,25 @@ export default class App extends Component {
     this.handleClearComplete = this.handleClearComplete.bind(this);
   }
 
+  componentWillMount() {
+    AsyncStorage.getItem('items').then((json) => {
+      try {
+        const items = JSON.parse(json);
+        this.setSource(items, items);
+      } catch(e) {
+
+      }
+    })
+  }
+
   setSource(items, itemsDatesource, otherState = {}) {
     this.setState({
       items,
       dataSource: this.state.dataSource.cloneWithRows(itemsDatesource),
       ...otherState
     })
+
+    AsyncStorage.setItem('items', JSON.stringify(items));
   }
 
   handleAddItem() {
