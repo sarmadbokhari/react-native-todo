@@ -126,7 +126,10 @@ export default class App extends Component {
             }}>
           </ListView>
         </View>
-        <Footer onFilter={this.handleFilter} filter={this.state.filter} />
+        <Footer
+          count={filterItems('PENDING', this.state.items).length}
+          onFilter={this.handleFilter}
+          filter={this.state.filter} />
       </View>
     );
   }
