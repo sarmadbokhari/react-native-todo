@@ -96,8 +96,8 @@ export default class App extends Component {
         ...item,
         complete
       }
-      this.setSource(newItems, filterItems(this.state.filter, newItems));
-    })
+    });
+    this.setSource(newItems, filterItems(this.state.filter, newItems));
   }
 
   handleRemoveItem(key) {
