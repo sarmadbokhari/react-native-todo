@@ -37,6 +37,7 @@ export default class App extends Component {
     this.handleToggleComplete = this.handleToggleComplete.bind(this);
     this.handleRemoveItem = this.handleRemoveItem.bind(this);
     this.handleFilter = this.handleFilter.bind(this);
+    this.handleClearComplete = this.handleClearComplete.bind(this);
   }
 
   setSource(items, itemsDatesource, otherState = {}) {
@@ -97,6 +98,11 @@ export default class App extends Component {
     this.setSource(this.state.items, filterItems(filter, this.state.items), { filter })
   }
 
+  handleClearComplete() {
+    const newItems = filterItems('PENDING', this.state.items);
+    this.setSource(newItems, filterItems(this.state.filter, newItems))
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -129,7 +135,8 @@ export default class App extends Component {
         <Footer
           count={filterItems('PENDING', this.state.items).length}
           onFilter={this.handleFilter}
-          filter={this.state.filter} />
+          filter={this.state.filter}
+          onClearComplete={this.handleClearComplete} />
       </View>
     );
   }
